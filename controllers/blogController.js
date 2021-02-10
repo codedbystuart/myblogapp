@@ -20,6 +20,23 @@ const BlogController = {
         status: res.statusCode,
         message: `Ooops, something went wrong, ${error}`
       }));
+  },
+  getPosts: (req, res) => {
+    Blog.find().exec()
+      .then((result) => {
+        result.length > 0 ? res.status(200).json({
+          status: res.statusCode,
+          result
+        })
+        : res.status(200).json({
+          status: res.statusCode,
+          message: "No posts have been added yet"
+        })
+      })
+      .catch((error) => res.status(500).json({
+        status: res.statusCode,
+        message: `something went wrong: ${error}`
+      }));
   }
 };
 
