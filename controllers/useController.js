@@ -11,7 +11,7 @@ const UserController = {
       return res.status(409).json({
         status: res.statusCode,
         message: `uh oh, email ${userExists.email} has already been used`
-      })
+      });
     }
 
     const hashedPass = await bcrypt.hash(req.body.password, 10);
@@ -42,8 +42,8 @@ const UserController = {
       .catch((error) => res.status(500).json({
         status: res.statusCode,
         message: `Ooops, something went wrong: ${error}`
-      }))
+      }));
   }
-}
+};
 
 module.exports = UserController;
