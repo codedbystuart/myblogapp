@@ -37,6 +37,22 @@ const BlogController = {
         status: res.statusCode,
         message: `something went wrong: ${error}`
       }));
+  },
+  getSinglePost: async (req, res) => {
+    const { id } = req.params;
+    const post = await Blog.findById({ _id: id }).exec();
+
+    if (!post) {
+      return res.status(404).json({
+        status: res.statusCode,
+        message: 'Could not find post with provided ID'
+      });
+    }
+
+    return res.status(200).json({
+      status: res.statusCode,
+      post
+    });
   }
 };
 
