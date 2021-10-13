@@ -1,8 +1,10 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const User = require('../models/UserModel');
+const User = require("../models/UserModel");
+
+// TODO: handle logins
 
 const UserController = {
   registerUser: async (req, res) => {
@@ -10,7 +12,7 @@ const UserController = {
     if (userExists) {
       return res.status(409).json({
         status: res.statusCode,
-        message: `uh oh, email ${userExists.email} has already been used`
+        message: `uh oh, email ${userExists.email} has already been used`,
       });
     }
 
@@ -21,29 +23,32 @@ const UserController = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      password: hashedPass
+      password: hashedPass,
     });
 
-    user.save()
+    user
+      .save()
       .then(async (result) => {
         const user = {
           id: result._id,
           email: result.email,
           firstName: result.firstName,
-          lastName: result.lastName
+          lastName: result.lastName,
         };
         const token = await jwt.sign(user, process.env.SECRET_KEY);
         return res.status(201).json({
           status: res.statusCode,
           result,
-          token
+          token,
         });
       })
-      .catch((error) => res.status(500).json({
-        status: res.statusCode,
-        message: `Ooops, something went wrong: ${error}`
-      }));
-  }
+      .catch((error) =>
+        res.status(500).json({
+          status: res.statusCode,
+          message: `Ooops, something went wrong: ${error}`,
+        })
+      );
+  },
 };
 
 module.exports = UserController;
